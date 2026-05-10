@@ -1,0 +1,39 @@
+name: Manual Release Download
+
+on:
+  workflow_dispatch:
+    inputs:
+      download_url:
+        description: 'Direct download URL for mhrv-rs release'
+        required: true
+        type: string
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download file
+        run: |
+          echo "Downloading mhrv-rs..."
+          curl -L -o mhrv-rs-release.tar.gz "${{ github.event.inputs.download_url }}"
+          
+          echo "File size:"
+          ls -lh mhrv-rs-release.tar.gz
+          
+          echo "SHA256 checksum:"
+          sha256sum mhrv-rs-release.tar.gz
+          
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Commit file
+        run: |
+          git add mhrv-rs-release.tar.gz
+          git commit -m "Add mhrv-rs release binary" || echo "No changes to commit"
+          git push
