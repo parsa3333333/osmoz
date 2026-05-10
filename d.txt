@@ -1,0 +1,1 @@
+https://github.com/therealaleph/MasterHttpRelayVPN-RUST/releases/download/v1.9.19/mhrv-rs-linux-musl-amd64.tar.gz
